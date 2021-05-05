@@ -13,14 +13,17 @@
 var scoreArray = [];
 var replay = false;
 
-alert("Campo Minato\n3 difficoltà possibili\ndifficoltà 0 => numeri tra 1 e 100\ndifficoltà 1 => numeri tra 1 e 80\ndifficoltà 2 => numeri tra 1 e 50")
+alert("Campo Minato\n3 difficoltà possibili:\nDifficoltà 0 => numeri tra 1 e 100\nDifficoltà 1 => numeri tra 1 e 80\nDifficoltà 2 => numeri tra 1 e 50")
 
 do {
     game(difficultChoice());
 } while (replay)
 
+for (var i = 0; i < scoreArray.length; i++) {
+    document.getElementById("partite_giocate").innerHTML += "<li>" + scoreArray[i] + "</li>";
+}
 
-console.log("Punteggi partite", scoreArray);
+console.log("Punteggi partite:", scoreArray); // debug
 
 
 
@@ -36,9 +39,14 @@ function isInArray (element, array) {
 function difficultChoice () {
     // chiedo la difficoltà gioco e ritorno il valore da impostare a cells
     do {
-        var level = parseInt(prompt("Scegli la difficoltà: 0, 1 o 2?"));
-    } while (isNaN(level) || level < 0 || level > 2);
+        var level = parseInt(prompt("Scegli la difficoltà: 0, 1 o 2?\nMi sento fortunato => 3"));
+    } while (isNaN(level) || level < 0 || level > 3);
 
+    if (level == 3) {
+        level = casualNumber(0, 2);
+        alert("Modalità casuale, difficoltà: " + level);
+    };
+    
     if (level == 0) {
         return 100
     } else if (level == 1) {
