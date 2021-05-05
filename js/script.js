@@ -12,12 +12,20 @@
 
 var bombArray = [];
 var attemptsArray = [];
-var cells = 100;
+// var cells = 100;
 var bomb = 16;
-var attempts = cells - bomb;
+// var attempts = cells - bomb;
 var score = 0;
 var gameOver = false;
 
+// chiedo la difficoltà gioco e imposto la variabile cells
+alert("Campo Minato\n3 difficoltà possibili\ndifficoltà 0 => numeri tra 1 e 100\ndifficoltà 1 => numeri tra 1 e 80\ndifficoltà 2 => numeri tra 1 e 50")
+do {
+    var level = parseInt(prompt("Scegli la difficoltà: 0, 1 o 2?"));
+} while (isNaN(level) || level < 0 || level > 3);
+
+var cells = difficultChoice(level);
+var attempts = cells - bomb;
 
 // genero 16 numeri univoci per le bombe
 for (var i = 0; i < bomb; i++) {
@@ -67,4 +75,14 @@ function casualNumber(min, max) {
 
 function isInArray (element, array) {
     return array.indexOf(element) != -1;
+};
+
+function difficultChoice (choice) {
+    if (choice == 0) {
+        return 100
+    } else if (choice == 1) {
+        return 80
+    } else if (choice == 2)  {
+        return 50
+    };
 };
