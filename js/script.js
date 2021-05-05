@@ -10,61 +10,17 @@
 // con difficoltà 1 => tra 1 e 80
 // con difficoltà 2 => tra 1 e 50
 
-var bombArray = [];
-var attemptsArray = [];
-// var cells = 100;
-var bomb = 16;
-// var attempts = cells - bomb;
-var score = 0;
-var gameOver = false;
+var scoreArray = [];
+var replay = false;
 
-// chiedo la difficoltà gioco e imposto la variabile cells
 alert("Campo Minato\n3 difficoltà possibili\ndifficoltà 0 => numeri tra 1 e 100\ndifficoltà 1 => numeri tra 1 e 80\ndifficoltà 2 => numeri tra 1 e 50")
+
 do {
-    var level = parseInt(prompt("Scegli la difficoltà: 0, 1 o 2?"));
-} while (isNaN(level) || level < 0 || level > 3);
+    game(difficultChoice());
+} while (replay)
 
-var cells = difficultChoice(level);
-var attempts = cells - bomb;
 
-// genero 16 numeri univoci per le bombe
-for (var i = 0; i < bomb; i++) {
-    do {
-        var number = casualNumber(1, cells);
-    } while (isInArray(number, bombArray));
-    bombArray.push(number);
-};
-console.log(bombArray.sort()); // debug
-
-// chiedo un numero univoco e che non sia una bomba
-while (attemptsArray.length < attempts && !gameOver) {
-    do  {
-        var questionNumber = parseInt(prompt("Dimmi un numero tra 1 e " + cells));
-    } while (isInArray(questionNumber, attemptsArray) || isNaN(questionNumber) || questionNumber < 1 || questionNumber > cells);
-
-    if (isInArray(questionNumber, bombArray)) {
-        gameOver = true;
-        if (score == 1) {
-            console.log("Hai Perso, hai totalizzato 1 punto!");
-            alert("Hai Perso, hai totalizzato 1 punto!");
-            
-        } else {
-            console.log("Hai Perso, hai totalizzato " + score + " punti!");
-            alert("Hai Perso, hai totalizzato " + score + " punti!");
-        };
-    } else {
-        attemptsArray.push(questionNumber);
-        score += 1;
-    };
-
-    if (attemptsArray.length == attempts) {
-        console.log("Hai Vinto!!! Hai totalizzato " + score + " punti su un massimo di " + attempts);
-        alert("Hai Vinto!!! Hai totalizzato " + score + " punti su un massimo di " + attempts);
-    };
-};
-
-console.log(attemptsArray); // debug
-console.log(score);         // debug
+console.log("Punteggi partite", scoreArray);
 
 
 
@@ -77,12 +33,72 @@ function isInArray (element, array) {
     return array.indexOf(element) != -1;
 };
 
-function difficultChoice (choice) {
-    if (choice == 0) {
+function difficultChoice () {
+    // chiedo la difficoltà gioco e ritorno il valore da impostare a cells
+    do {
+        var level = parseInt(prompt("Scegli la difficoltà: 0, 1 o 2?"));
+    } while (isNaN(level) || level < 0 || level > 2);
+
+    if (level == 0) {
         return 100
-    } else if (choice == 1) {
+    } else if (level == 1) {
         return 80
-    } else if (choice == 2)  {
+    } else if (level == 2)  {
         return 50
     };
 };
+
+function game (difficult) {
+    var bombArray = [];
+    var attemptsArray = [];
+    var cells = difficult;
+    var bomb = 16;
+    var attempts = cells - bomb;
+    var score = 0;
+    var gameOver = false;
+
+    // genero 16 numeri univoci per le bombe
+    for (var i = 0; i < bomb; i++) {
+        do {
+            var number = casualNumber(1, cells);
+        } while (isInArray(number, bombArray));
+        bombArray.push(number);
+    };
+    console.log(bombArray.sort()); // debug
+
+    // chiedo un numero univoco e che non sia una bomba
+    while (attemptsArray.length < attempts && !gameOver) {
+        do  {
+            var questionNumber = parseInt(prompt("Dimmi un numero tra 1 e " + cells));
+        } while (isInArray(questionNumber, attemptsArray) || isNaN(questionNumber) || questionNumber < 1 || questionNumber > cells);
+
+        if (isInArray(questionNumber, bombArray)) {
+            gameOver = true;
+            if (score == 1) {
+                console.log("Hai Perso, hai totalizzato 1 punto!");
+                alert("Hai Perso, hai totalizzato 1 punto!");
+                
+            } else {
+                console.log("Hai Perso, hai totalizzato " + score + " punti!");
+                alert("Hai Perso, hai totalizzato " + score + " punti!");
+            };
+        } else {
+            attemptsArray.push(questionNumber);
+            score += 1;
+        };
+
+        if (attemptsArray.length == attempts) {
+            console.log("Hai Vinto!!! Hai totalizzato " + score + " punti su un massimo di " + attempts);
+            alert("Hai Vinto!!! Hai totalizzato " + score + " punti su un massimo di " + attempts);
+        };
+    };
+
+    scoreArray.push(score);
+
+    do {
+    var questionGame = prompt("Vuoi fare un'altra partita? SI / NO").trim().toLowerCase();
+    } while (questionGame != "si" && questionGame != "no");
+
+    questionGame == "si" ? replay = true : replay = false;
+
+}; 
